@@ -84,7 +84,6 @@ function updateGrid() {
     gridLayer.classList.add('visible');
 }
 
-// Export Frames as ZIP
 frameForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const frameWidth = parseInt(document.getElementById('frameWidth').value);
