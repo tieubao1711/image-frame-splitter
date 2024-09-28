@@ -28,14 +28,19 @@ importBtn.addEventListener('click', () => {
     input.click();
 });
 
-// Update Grid Layer
+// Lắng nghe các sự kiện thay đổi input để cập nhật grid
+document.querySelectorAll('#frameWidth, #frameHeight, #startX, #startY, #offsetX, #offsetY, #numFrames').forEach(input => {
+    input.addEventListener('input', updateGrid);  // Cập nhật grid mỗi khi thay đổi giá trị
+});
+
+// Update Grid Layer and ensure startX, startY, offsetX, and offsetY are applied correctly
 function updateGrid() {
     const frameWidth = parseInt(document.getElementById('frameWidth').value);
     const frameHeight = parseInt(document.getElementById('frameHeight').value);
-    const startX = parseInt(document.getElementById('startX').value);  // Lấy giá trị startX
-    const startY = parseInt(document.getElementById('startY').value);  // Lấy giá trị startY
-    const offsetX = parseInt(document.getElementById('offsetX').value);  // Lấy giá trị offsetX
-    const offsetY = parseInt(document.getElementById('offsetY').value);  // Lấy giá trị offsetY
+    const startX = parseInt(document.getElementById('startX').value);  
+    const startY = parseInt(document.getElementById('startY').value);  
+    const offsetX = parseInt(document.getElementById('offsetX').value);  
+    const offsetY = parseInt(document.getElementById('offsetY').value);  
     const numFrames = parseInt(document.getElementById('numFrames').value);
 
     if (!uploadedImage || isNaN(frameWidth) || isNaN(frameHeight) || isNaN(numFrames)) return;
@@ -49,34 +54,33 @@ function updateGrid() {
     gridCanvas.style.width = previewWidth + 'px';
     gridCanvas.style.height = previewHeight + 'px';
 
+    // Set the canvas to match the original image size
     gridCanvas.width = originalWidth;
     gridCanvas.height = originalHeight;
 
     const ctx = gridCanvas.getContext('2d');
     ctx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-    ctx.strokeStyle = 'rgba(255, 0, 0, 0.75)';
-
-    const cols = Math.floor(originalWidth / frameWidth); 
-    const rows = Math.floor(originalHeight / frameHeight);
+    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
 
     let frameCount = 0;
 
     // Vẽ grid với start_x, start_y, offset_x, offset_y
-    for (let row = 0; row < rows && frameCount < numFrames; row++) {
-        for (let col = 0; col < cols && frameCount < numFrames; col++) {
-            const x = startX + col * (frameWidth + offsetX);  // Bắt đầu từ startX và thêm offsetX
-            const y = startY + row * (frameHeight + offsetY); // Bắt đầu từ startY và thêm offsetY
+    for (let row = 0; row < originalHeight && frameCount < numFrames; row++) {
+        for (let col = 0; col < originalWidth && frameCount < numFrames; col++) {
+            const x = startX + col * (frameWidth + offsetX);  
+            const y = startY + row * (frameHeight + offsetY); 
 
             // Chỉ vẽ grid nếu vị trí nằm trong kích thước ảnh
             if (x + frameWidth <= originalWidth && y + frameHeight <= originalHeight) {
-                ctx.strokeRect(x, y, frameWidth, frameHeight);
-                frameCount++;
+                ctx.strokeRect(x, y, frameWidth, frameHeight); // Vẽ khung grid
+                frameCount++; // Tăng số frame hiện tại
             } else {
                 break;  // Dừng nếu vị trí vượt quá kích thước ảnh
             }
         }
     }
 
+    // Hiển thị lớp grid
     gridLayer.classList.add('visible');
 }
 
@@ -87,6 +91,10 @@ frameForm.addEventListener('submit', async (e) => {
     const frameHeight = parseInt(document.getElementById('frameHeight').value);
     const outputName = document.getElementById('outputName').value;
     const numFrames = parseInt(document.getElementById('numFrames').value);
+    const startX = parseInt(document.getElementById('startX').value);
+    const startY = parseInt(document.getElementById('startY').value);
+    const offsetX = parseInt(document.getElementById('offsetX').value);
+    const offsetY = parseInt(document.getElementById('offsetY').value);
 
     if (!uploadedImage || isNaN(frameWidth) || isNaN(frameHeight) || numFrames <= 0) {
         alert('Invalid inputs!');
@@ -101,8 +109,9 @@ frameForm.addEventListener('submit', async (e) => {
     const zip = new JSZip();
     let frameCount = 0;
 
-    for (let y = 0; y < uploadedImage.height && frameCount < numFrames; y += frameHeight) {
-        for (let x = 0; x < uploadedImage.width && frameCount < numFrames; x += frameWidth) {
+    // Loop through the image to extract frames using startX, startY, offsetX, and offsetY
+    for (let y = startY; y < uploadedImage.height && frameCount < numFrames; y += frameHeight + offsetY) {
+        for (let x = startX; x < uploadedImage.width && frameCount < numFrames; x += frameWidth + offsetX) {
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -125,3 +134,4 @@ frameForm.addEventListener('submit', async (e) => {
         link.click();
     });
 });
+
