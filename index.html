@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Frame Splitter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="left">
+        <h2>Image Frame Splitter</h2>
+        <p>Author: @bavuong12 / @kyotheone / keikunhudon</p>
+        <form id="frame-form">
+            <div class="form-group">
+                <label for="frameWidth">Frame Width (px):</label>
+                <input type="number" id="frameWidth" required>
+            </div>
+            <div class="form-group">
+                <label for="frameHeight">Frame Height (px):</label>
+                <input type="number" id="frameHeight" required>
+            </div>
+            <div class="form-group">
+                <label for="startX">Start X (px):</label>
+                <input type="number" id="startX" value="0" required>
+            </div>
+            <div class="form-group">
+                <label for="startY">Start Y (px):</label>
+                <input type="number" id="startY" value="0" required>
+            </div>
+            <div class="form-group">
+                <label for="offsetX">Offset X (px):</label>
+                <input type="number" id="offsetX" value="0" required>
+            </div>
+            <div class="form-group">
+                <label for="offsetY">Offset Y (px):</label>
+                <input type="number" id="offsetY" value="0" required>
+            </div>
+            <div class="form-group">
+                <label for="outputName">Output File Name:</label>
+                <input type="text" id="outputName" placeholder="example_frame" required>
+            </div>
+            <div class="form-group">
+                <label for="numFrames">Number of Frames:</label>
+                <input type="number" id="numFrames" min="1" required>
+            </div>
+            <div class="button-group">
+                <button type="button" id="importBtn">Import Image</button>
+                <button type="submit" id="exportBtn" disabled>Export as ZIP</button>
+            </div>
+        </form>
+        
+    </div>
+
+    <div class="right">
+        <div id="preview">
+            <img id="imagePreview" src="" alt="Image Preview">
+            <div class="grid" id="gridLayer">
+                <canvas id="gridCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="jszip.min.js"></script> <!-- Thư viện JSZip để tạo file zip -->
+<script src="script.js"></script> <!-- File script chính -->
+</body>
+</html>
