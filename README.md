@@ -2,6 +2,8 @@
 
 A web tool to split images into multiple frames with customizable dimensions. Users can specify frame width, height, starting position, and offset values. The tool supports exporting all frames as a ZIP file for easy download.
 
+@Telegram: @bavuong12, @kyotheone
+
 ## Features
 
 - **Import images**: Upload an image file to the web tool.
